@@ -7,6 +7,7 @@ from tools import Tools
 from pc_control import PCControl
 from internet import Internet
 from speech import SpeechEngine
+from memory_handler import MemoryHandler
 
 
 client = Groq(api_key=GROQ_API_KEY)
@@ -18,6 +19,7 @@ class AIAssistant:
         self.speech = SpeechEngine()
 
         self.memory = Memory()
+        self.memory_handler = MemoryHandler()
 
         self.memory_manager = MemoryManager(
             self.memory
