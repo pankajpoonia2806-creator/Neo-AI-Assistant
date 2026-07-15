@@ -8,6 +8,7 @@ from pc_control import PCControl
 from internet import Internet
 from speech import SpeechEngine
 from memory_handler import MemoryHandler
+from chat_handler import ChatHandler
 
 
 client = Groq(api_key=GROQ_API_KEY)
@@ -20,6 +21,7 @@ class AIAssistant:
 
         self.memory = Memory()
         self.memory_handler = MemoryHandler()
+        self.chat_handler = ChatHandler()
 
         self.memory_manager = MemoryManager(
             self.memory
@@ -114,21 +116,11 @@ reply in English.
 
         try:
 
-            response = client.chat.completions.create(
-                model="llama-3.3-70b-versatile",
-                messages=[
-                    system_message,
-                    *self.conversation_history,
-                    {
-                        "role": "user",
-                        "content": user_input
-                    }
-                ],
-                temperature=0.7,
-                max_tokens=1024
-            )
-
-            ai_reply = response.choices[0].message.content.strip()
+           ai_reply = self.chat_handler.chat(
+    system_message,
+    self.conversation_history,
+    user_input
+)
 
         except Exception as e:
 
