@@ -1,15 +1,13 @@
 from groq import Groq
 from config import GROQ_API_KEY
-from gtts import gTTS
 
 from memory import Memory
 from memory_manager import MemoryManager
 from tools import Tools
 from pc_control import PCControl
 from internet import Internet
-import threading
-import playsound
-import os
+from speech import SpeechEngine
+
 
 client = Groq(api_key=GROQ_API_KEY)
 
@@ -17,6 +15,7 @@ client = Groq(api_key=GROQ_API_KEY)
 class AIAssistant:
 
     def __init__(self):
+        self.speech = SpeechEngine()
 
         self.memory = Memory()
 
@@ -57,39 +56,8 @@ reply in English.
     # ---------------- Voice ---------------- #
 
     def speak(self, text):
-
-        print("Neo:", text)
-
-        if not self.voice_enabled:
-            return
-
-        def speak_thread():
-
-            try:
-
-                filename = "neo_response.mp3"
-
-                tts = gTTS(
-                    text=text,
-                    lang="hi",
-                    slow=False
-                )
-
-                tts.save(filename)
-
-                playsound.playsound(filename)
-
-                if os.path.exists(filename):
-                    os.remove(filename)
-
-            except Exception as e:
-
-                print(e)
-
-        threading.Thread(
-            target=speak_thread,
-            daemon=True
-        ).start()
+     self.speech.set_voice(self.voice_enabled)
+     self.speech.speak(text)
             # ---------------- Main ---------------- #
 
     def get_response(self, user_input):
