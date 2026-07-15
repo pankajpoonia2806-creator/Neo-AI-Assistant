@@ -1,0 +1,11 @@
+__pycache__/
+*.pyc
+venv/
+.env
+neo_response.mp3
+database.db
+.env
+*.env
+config.py
+__pycache__/
+*.pyc
