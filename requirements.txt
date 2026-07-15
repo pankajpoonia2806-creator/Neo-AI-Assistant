@@ -1,0 +1,10 @@
+groq
+python-dotenv
+requests
+wikipedia
+beautifulsoup4
+pyttsx3
+SpeechRecognition
+pyaudio
+pyautogui
+psutil
