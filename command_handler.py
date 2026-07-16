@@ -1,14 +1,17 @@
 from pc_control import PCControl
+from app_launcher import AppLauncher
 
 
 class CommandHandler:
 
     def __init__(self):
-
+     
+        self.launcher = AppLauncher()
         self.commands = {
             "chrome": PCControl.open_chrome,
             "notepad": PCControl.open_notepad,
             "calculator": PCControl.open_calculator,
+            "calc": PCControl.open_calculator,
             "explorer": PCControl.open_explorer,
             "vscode": PCControl.open_vscode,
             "vs code": PCControl.open_vscode,
@@ -18,19 +21,23 @@ class CommandHandler:
 
         lower = user_input.lower().strip()
 
-        print("Command:", lower)
+        if lower.startswith(("open ", "launch ", "start ")):
 
-        if lower.startswith("open "):
+            app = (
+                lower.replace("open ", "")
+                     .replace("launch ", "")
+                     .replace("start ", "")
+                     .strip()
+            )
 
-            app = lower.replace("open ", "").strip()
+        # Built-in commands
+        if app in self.commands:
+           return self.commands[app]()
 
-            print("App:", app)
+        # AI App Launcher
+        result = self.launcher.open(app)
 
-            command = self.commands.get(app)
+        if result:
+           return result
 
-            print("Found:", command)
-
-            if command:
-                return command()
-
-        return None
+        return f"Sorry, I couldn't find '{app}'."
