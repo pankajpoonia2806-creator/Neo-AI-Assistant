@@ -1,12 +1,14 @@
 from pc_control import PCControl
 from app_launcher import AppLauncher
+from website_launcher import WebsiteLauncher
 
 
 class CommandHandler:
 
     def __init__(self):
-     
+
         self.launcher = AppLauncher()
+
         self.commands = {
             "chrome": PCControl.open_chrome,
             "notepad": PCControl.open_notepad,
@@ -30,14 +32,25 @@ class CommandHandler:
                      .strip()
             )
 
-        # Built-in commands
-        if app in self.commands:
-           return self.commands[app]()
+            # ---------------- Built-in Commands ---------------- #
 
-        # AI App Launcher
-        result = self.launcher.open(app)
+            if app in self.commands:
+                return self.commands[app]()
 
-        if result:
-           return result
+            # ---------------- Website Launcher ---------------- #
 
-        return f"Sorry, I couldn't find '{app}'."
+            result = WebsiteLauncher.open(app)
+
+            if result:
+                return result
+
+            # ---------------- Windows App Launcher ---------------- #
+
+            result = self.launcher.open(app)
+
+            if result:
+                return result
+
+            return f"Sorry, I couldn't find '{app}'."
+
+        return None
