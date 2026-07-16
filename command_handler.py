@@ -1,6 +1,7 @@
 from pc_control import PCControl
 from app_launcher import AppLauncher
 from website_launcher import WebsiteLauncher
+from file_search import FileSearch
 
 
 class CommandHandler:
@@ -8,6 +9,7 @@ class CommandHandler:
     def __init__(self):
 
         self.launcher = AppLauncher()
+        self.file_search = FileSearch()
 
         self.commands = {
             "chrome": PCControl.open_chrome,
@@ -47,6 +49,13 @@ class CommandHandler:
             # ---------------- Windows App Launcher ---------------- #
 
             result = self.launcher.open(app)
+
+            if result:
+                return result
+
+            # ---------------- AI File Search ---------------- #
+
+            result = self.file_search.open(app)
 
             if result:
                 return result
