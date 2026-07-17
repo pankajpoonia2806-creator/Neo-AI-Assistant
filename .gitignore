@@ -16,3 +16,4 @@ user_data/
 
 venv/
 .venv/
+files.db

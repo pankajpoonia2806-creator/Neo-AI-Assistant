@@ -1,34 +1,46 @@
 import os
 
+from file_index import FileIndex
+
 
 class FileSearch:
 
     def __init__(self):
 
-        from file_scanner import FileScanner
-
-        print("Scanning Files...")
-
-        self.files = FileScanner.scan()
+        self.index = FileIndex()
 
     def open(self, filename):
 
         filename = filename.lower().strip()
 
-        # Exact Match
-        if filename in self.files:
+        print(f"\nSearching file: {filename}")
 
-            os.startfile(self.files[filename])
+        results = self.index.search(filename)
 
-            return f"Opening {filename}"
+        if not results:
 
-        # Partial Match
-        for name, path in self.files.items():
+            print("No file found.")
 
-            if filename in name:
+            return None
 
-                os.startfile(path)
+        name, path = results[0]
 
-                return f"Opening {name}"
+        print("Found:", path)
 
-        return None
+        if not os.path.exists(path):
+
+            print("File missing from disk.")
+
+            return "File exists in database but not on disk."
+
+        try:
+
+            os.startfile(path)
+
+            return f"Opening {name}"
+
+        except Exception as e:
+
+            print(e)
+
+            return str(e)

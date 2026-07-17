@@ -25,41 +25,46 @@ class CommandHandler:
 
         lower = user_input.lower().strip()
 
-        if lower.startswith(("open ", "launch ", "start ")):
+        if not lower.startswith(("open ", "launch ", "start ")):
+            return None
 
-            app = (
-                lower.replace("open ", "")
-                     .replace("launch ", "")
-                     .replace("start ", "")
-                     .strip()
-            )
+        app = (
+            lower.replace("open ", "")
+                 .replace("launch ", "")
+                 .replace("start ", "")
+                 .strip()
+        )
 
-            # ---------------- Built-in Commands ---------------- #
+        print(f"\nCommand: {app}")
 
-            if app in self.commands:
-                return self.commands[app]()
+        # ---------------- Built-in Commands ---------------- #
 
-            # ---------------- Website Launcher ---------------- #
+        if app in self.commands:
+            print("Built-in Command")
+            return self.commands[app]()
 
-            result = WebsiteLauncher.open(app)
+        # ---------------- AI File Search ---------------- #
 
-            if result:
-                return result
+        result = self.file_search.open(app)
 
-            # ---------------- Windows App Launcher ---------------- #
+        if result:
+            print("Opened using File Search")
+            return result
 
-            result = self.launcher.open(app)
+        # ---------------- Website Launcher ---------------- #
 
-            if result:
-                return result
+        result = WebsiteLauncher.open(app)
 
-            # ---------------- AI File Search ---------------- #
+        if result:
+            print("Opened as Website")
+            return result
 
-            result = self.file_search.open(app)
+        # ---------------- Windows App Launcher ---------------- #
 
-            if result:
-                return result
+        result = self.launcher.open(app)
 
-            return f"Sorry, I couldn't find '{app}'."
+        if result:
+            print("Opened using App Launcher")
+            return result
 
-        return None
+        return f"Sorry, I couldn't find '{app}'."
